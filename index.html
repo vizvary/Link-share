@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Share</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        button.close-btn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function closeLink(index) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var closedLink = xhr.responseText;
+                    alert('Closed: ' + closedLink);  
+                }
+            };
+            xhr.open("GET", "/close_link/" + index, true);
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <h1>Link Share Dashboard</h1>
+    <form action="/open_link" method="post">
+        <label for="link">Enter Link:</label>
+        <input type="text" id="link" name="link" required>
+        <button type="submit">Open</button>
+    </form>
+
+    <h2>Recently Opened Links</h2>
+    <ul>
+        {% for link in recent_links %}
+            <li>
+                <span>{{ link }}</span>
+                <button class="close-btn" onclick="closeLink({{ loop.index-1 }})">Close</button>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
